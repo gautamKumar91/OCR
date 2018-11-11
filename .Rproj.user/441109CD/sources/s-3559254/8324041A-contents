@@ -1,0 +1,39 @@
+library(shiny)
+library(shinyjs) 
+ui <- fluidPage(
+  htmlOutput("first"),
+  htmlOutput("second"),
+  actionButton('button1',"Button")
+)
+
+server <- function(input, output,session) {
+  # Our dataset
+  data <- "mtcars"
+  v <- reactiveValues(
+    test = "NULL",
+    basic= "tera"
+  )
+  
+  #print(paste0("inside server:"),data,v$test,v$basic)
+  
+  observeEvent(input$button1, {
+    v$basic <- "sabka" 
+    cat(paste0("inside observeEvent:"),data,v$test,v$basic)
+  })
+  
+  output$first <- renderUI(
+    cat(paste0("inside output$first",data,v$test,v$basic))
+  )
+  
+  output$second <- renderUI({
+    data <- "hello"
+    v$test <- "wordl"
+    basic <- "basic"
+    v$basic <- "mera"
+    cat(paste0("inside output$second:"),data,v$test,v$basic)
+  }
+  
+  )
+}
+
+shinyApp(ui, server)
